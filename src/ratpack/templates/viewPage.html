@@ -1,12 +1,87 @@
 <html>
 <head>
-    <title>Hello From Ratpack</title>
+  <title>Hello From Ratpack</title>
+  <style>
+    .main-wrapper {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    .main-textarea {
+      width: 80%;
+      height: 300px;
+      border: 1px solid black;
+      padding: 5px;
+      clear: both;
+    }
+
+    .column {
+      display: inline-block;
+      vertical-align: top;
+      width: 48%;
+      height: 100%;
+      padding: 10px;
+    }
+  </style>
 </head>
 <body>
-<h1>Hello $model.name, meet the amazing Ratpack</h1>
-<form action="/purge" method="post">
-    <input type="submit" value="Purge this page">
-</form>
-$model.htmlpice
+<div class="main-wrapper"></div>
+<div class="column">
+  <h1>Hello $model.name, meet the amazing Ratpack</h1>
+  <form action="/purge" method="post">
+    <p>Please upload main image</p>
+    <input id="image-file" name="image-file" type="file"/>
+    <br/>
+    <p>Please enter a content</p>
+    <div>
+      <textarea class="main-textarea"></textarea>
+    </div>
+    <p>
+      <input type="submit" value="Purge this page">
+    </p>
+  </form>
+</div>
+<div class="column">
+  <div class="html-template">
+    <h3>Use this templates to copy to textarea</h3>
+    <div>
+      <h4>Template 1</h4>
+      <pre><xmp>
+        <div>
+          <h3>Some new title</h3>
+          <p>Lorem ipsum dolor eiusmod tempor incididunt ut labore et dolore magna .</p>
+          <p>Ut enim ad minim veniam, quis nostrud laboris nisi ut aliquip consequat.</p>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit nulla pariatur.</p>
+          <p>Excepteur sint non proident, sunt in culpa qui officia deserunt laborum.</p>
+          <p>Ut enim ad minim, quis nostrud  ullamco nisi ut aliquip ex ea consequat.</p>
+          <p>Duis aute irure dolor velit fugiat nulla pariatur.</p>
+          <p>Excepteur sint non proident, sunt in culpa qui officia mollit anim id est.</p>
+        </div>
+        </xmp></pre>
+    </div>
+    <div>
+      <h4>Template 2</h4>
+      <pre><xmp>
+        <div>
+          <h3>Some another title</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td>table content</td>
+                <td>table content</td>
+                <td>table content</td>
+              </tr>
+              <tr>
+                <td>table content</td>
+                <td>table content</td>
+                <td>table content</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </xmp></pre>
+    </div>
+  </div>
+</div>
 </body>
 </html>
