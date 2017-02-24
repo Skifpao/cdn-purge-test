@@ -6,7 +6,7 @@ import com.google.inject.Inject
  * Created by skifpao on 24/02/2017.
  */
 class UpdatePageService {
-    private String html
+    static String html
 
     @Inject
     UpdatePageService() {

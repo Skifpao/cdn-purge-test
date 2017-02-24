@@ -1,58 +1,64 @@
 <html>
 <head>
-  <title>Hello From Ratpack</title>
-  <style>
-    .main-wrapper {
-      width: 100%;
-      overflow: hidden;
-      position: relative;
-    }
-    .main-textarea {
-      width: 80%;
-      height: 300px;
-      border: 1px solid black;
-      padding: 5px;
-      clear: both;
-    }
+    <title>Hello From Ratpack</title>
+    <style>
+        .main-wrapper {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
 
-    .column {
-      display: inline-block;
-      vertical-align: top;
-      width: 48%;
-      height: 100%;
-      padding: 10px;
-    }
-  </style>
+        .textarea {
+            width: 80%;
+            height: 300px;
+            border: 1px solid black;
+            padding: 5px;
+            clear: both;
+        }
+
+        .column {
+            display: inline-block;
+            vertical-align: top;
+            width: 48%;
+            height: 100%;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
 <div class="main-wrapper"></div>
 <div class="column">
-  <h1>Hello $model.name, meet the amazing Ratpack</h1>
-  <form action="/save" method="post">
-    <p>Please upload main image</p>
-    <input id="image-file" name="image-main-file" type="file"/>
-    <button type="submit" formaction="/purgeMainImage">Purge</button>
-    <br/>
-    <p>Please upload image for sub page</p>
-    <input id="image-subpage-file" name="image-subpage-file" type="file"/>
-    <button type="submit" formaction="/purgeSubPageImage">Purge</button>
-    <br/>
-    <p>Please enter a content</p>
-    <div>
-      <textarea class="main-textarea"></textarea>
-    </div>
-    <p>
-      <input type="submit" value="Save this page">
-      <button type="submit" formaction="/purgeLayout">Purge layout</button>
-    </p>
-  </form>
+    <h1>Hello $model.name, meet the amazing Ratpack</h1>
+    <form action="/admin" method="post">
+        <p>Please upload main image</p>
+        <input id="image-file" name="image-main-file" type="file" value="1234567"/>
+
+
+        <input id="tesxtwa" name="image-main-file12e321" type="text" value="1234567"/>
+        <button type="submit" formaction="/purgeMainImage">Purge</button>
+        <br/>
+        <p>Please upload image for sub page</p>
+        <input id="image-subpage-file" name="image-subpage-file" type="file"/>
+        <button type="submit" formaction="/purgeSubPageImage">Purge</button>
+        <br/>
+        <p>Please enter a content</p>
+        <div>
+            <textarea class="textarea" id="textarea" name="textarea"></textarea>
+        </div>
+        <p>
+            <input type="submit" value="Save this page">
+            <button type="submit" formaction="/purgeLayout">Purge layout</button>
+        </p>
+    </form>
 </div>
+
+
 <div class="column">
-  <div class="html-template">
-    <h3>Use this templates to copy to textarea</h3>
-    <div>
-      <h4>Template 1</h4>
-      <pre><xmp>
+    <div class="html-template">
+        <h3>Use this templates to copy to textarea</h3>
+        <div>
+            <h4>Template 1</h4>
+            <pre><xmp>
         <div>
           <h3>Some new title</h3>
           <p>Lorem ipsum dolor eiusmod tempor incididunt ut labore et dolore magna .</p>
@@ -64,10 +70,10 @@
           <p>Excepteur sint non proident, sunt in culpa qui officia mollit anim id est.</p>
         </div>
         </xmp></pre>
-    </div>
-    <div>
-      <h4>Template 2</h4>
-      <pre><xmp>
+        </div>
+        <div>
+            <h4>Template 2</h4>
+            <pre><xmp>
         <div>
           <h3>Some another title</h3>
           <table>
@@ -86,8 +92,8 @@
           </table>
         </div>
       </xmp></pre>
+        </div>
     </div>
-  </div>
 </div>
 </body>
 </html>

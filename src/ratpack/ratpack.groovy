@@ -17,9 +17,9 @@ ratpack {
         get {
             redirect(301, "/admin")
         }
-        get("admin") { render groovyTemplate("admin.html") }
-        post "addHtml", new AdminHandler()
-        post "purge", new PurgeHandler()
+        path "admin", new AdminHandler()
+
+        post "purgeLayout", new PurgeHandler()
 
         get("date", new ViewHandler())
     }

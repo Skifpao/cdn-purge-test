@@ -1,6 +1,7 @@
 package com.handlers
 
 import com.service.UpdatePageService
+import ratpack.form.Form
 import ratpack.handling.Context
 import ratpack.handling.Handler
 import ratpack.handling.InjectionHandler
@@ -12,8 +13,19 @@ import static ratpack.groovy.Groovy.groovyTemplate
  */
 class AdminHandler extends InjectionHandler {
     void handle(Context ctx, UpdatePageService service) {
-        service.html = ctx.pathTokens.html
-        ctx.render ctx.pathTokens.html
+        ctx.byMethod {
+            it.get {
+                ctx.render groovyTemplate("viewPage.html")
+            }.post {
+                ctx.parse(Form).then({ data ->
+                    service.html = data.get("textarea")
+                    println service.html
+                    ctx.redirect("/date")
+
+                })
+
+            }
+        }
     }
 
 }

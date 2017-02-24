@@ -9,11 +9,8 @@ import ratpack.handling.Handler
  */
 class PurgeHandler implements Handler {
 
-//    PurgeService purgeService = new PurgeService("")
-
     @Override
     void handle(Context ctx) throws Exception {
         ctx.render ctx.request.path
-//        purgeService.fastlyClient.get()
     }
 }
