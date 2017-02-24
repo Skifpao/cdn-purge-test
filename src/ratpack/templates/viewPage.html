@@ -28,16 +28,22 @@
 <div class="main-wrapper"></div>
 <div class="column">
   <h1>Hello $model.name, meet the amazing Ratpack</h1>
-  <form action="/purge" method="post">
+  <form action="/save" method="post">
     <p>Please upload main image</p>
-    <input id="image-file" name="image-file" type="file"/>
+    <input id="image-file" name="image-main-file" type="file"/>
+    <button type="submit" formaction="/purgeMainImage">Purge</button>
+    <br/>
+    <p>Please upload image for sub page</p>
+    <input id="image-subpage-file" name="image-subpage-file" type="file"/>
+    <button type="submit" formaction="/purgeSubPageImage">Purge</button>
     <br/>
     <p>Please enter a content</p>
     <div>
       <textarea class="main-textarea"></textarea>
     </div>
     <p>
-      <input type="submit" value="Purge this page">
+      <input type="submit" value="Save this page">
+      <button type="submit" formaction="/purgeLayout">Purge layout</button>
     </p>
   </form>
 </div>
