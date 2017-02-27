@@ -1,5 +1,6 @@
 import com.AdminModule
 import com.handlers.AdminHandler
+import com.handlers.CacheControlHandlers
 import com.handlers.PurgeHandler
 import com.handlers.ViewHandler
 import ratpack.groovy.template.TextTemplateModule
@@ -14,6 +15,7 @@ ratpack {
     }
 
     handlers {
+        insert new CacheControlHandlers()
         get {
             redirect(301, "/admin")
         }
