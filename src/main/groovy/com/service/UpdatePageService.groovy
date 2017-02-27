@@ -10,5 +10,6 @@ class UpdatePageService {
 
     @Inject
     UpdatePageService() {
+//        html = ""
     }
 }
