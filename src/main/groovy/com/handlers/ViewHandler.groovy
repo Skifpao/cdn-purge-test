@@ -13,6 +13,7 @@ class ViewHandler extends InjectionHandler {
 
     void handle(Context ctx, UpdatePageService service) {
 //        println service.html
+        ctx.response.headers.add("Cache-Control","max-age=60")
         ctx.render groovyTemplate("result.html", result: service.html)
     }
 }

@@ -1,15 +1,8 @@
 package com.service
 
-import com.google.common.io.Resources
 import com.wtf.domains.Environment
-import com.wtf.domains.FastlyServiceProvisioner
 import com.wtf.domains.fastly.FastlyClient
-import wslite.http.auth.HTTPAuthorization
-import wslite.rest.RESTClient
 
-import static com.google.common.base.Charsets.UTF_8
-import static com.google.common.io.Resources.getResource
-import static com.service.config.FastlyCustomConfig.buildConfig
 import static com.wtf.domains.FastlyCustomConfig.buildConfig
 
 /**
@@ -21,7 +14,7 @@ class PurgeService {
         client = new FastlyClient("7a400cb9df4954bfc46c246e5fcbd91c")
 
 //       def provisioner =  new FastlyServiceProvisioner(client)
-        provisionPublished(Environment.PROD)
+//        provisionPublished(Environment.PROD)
     }
 
     public static final ArrayList<String> RETAINED_QUERY_PARAMETERS = ['tracker_id', 'topics', 'sptoken', 'vip_code']
@@ -33,17 +26,9 @@ class PurgeService {
     ]
 
     FastlyClient client
-//
-//    FastlyServiceProvisioner() {
-//    }
-//
-//
-//    FastlyServiceProvisioner(FastlyClient client) {
-//        this.client = client
-//    }
 
     void addDefaultCacheControl(String serviceId, int version) {
-        client.addHeaderSetting(serviceId, version, "default_cache_control", "http.Cache-Control", '"max-age=30"', true)
+        client.addHeaderSetting(serviceId, version, "default_cache_control", "http.Cache-Control", '"max-age=60"', true)
         println "Added default cache control header to service $serviceId"
     }
 
@@ -63,20 +48,20 @@ class PurgeService {
         println "Added AutoDiscover response to service $serviceId"
     }
 
-    void addWwwRedirect(String serviceId, int version) {
-        def conditionName = "host_is_www"
-        client.addCondition(serviceId, version, conditionName, 'req.http.host ~ "^www"', "REQUEST")
-        println "Added Condition WWW to service $serviceId"
-
-        client.addRequestResponseObject(serviceId, version, "redirect_to_knect365", 301, "Moved Permanently", conditionName, "", "")
-        println "Added Response redirect_to_knect365 to service $serviceId"
-
-        client.addCondition(serviceId, version, 'redirect_to_knect365', 'req.http.host ~ "^www" && resp.status == 301', "RESPONSE")
-        println "Added Response condition redirect_to_knect365 service $serviceId"
-
-        client.addHeaderSetting(serviceId, version, "knect365_redirect", "http.location", '"https://knect365.com" req.url', false, "RESPONSE", 'redirect_to_knect365')
-        println "Added Header knect365_redirect to service $serviceId"
-    }
+//    void addWwwRedirect(String serviceId, int version) {
+//        def conditionName = "host_is_www"
+//        client.addCondition(serviceId, version, conditionName, 'req.http.host ~ "^www"', "REQUEST")
+//        println "Added Condition WWW to service $serviceId"
+//
+//        client.addRequestResponseObject(serviceId, version, "redirect_to_knect365", 301, "Moved Permanently", conditionName, "", "")
+//        println "Added Response redirect_to_knect365 to service $serviceId"
+//
+//        client.addCondition(serviceId, version, 'redirect_to_knect365', 'req.http.host ~ "^www" && resp.status == 301', "RESPONSE")
+//        println "Added Response condition redirect_to_knect365 service $serviceId"
+//
+//        client.addHeaderSetting(serviceId, version, "knect365_redirect", "http.location", '"https://knect365.com" req.url', false, "RESPONSE", 'redirect_to_knect365')
+//        println "Added Header knect365_redirect to service $serviceId"
+//    }
 
     void addServerHeaderOverwriting(String serviceId, int version) {
         client.addHeaderSetting(serviceId, version, "overwrite_server_header", "http.Server", '"SERVER"', false)
@@ -138,12 +123,11 @@ class PurgeService {
         def version = client.addNewVersion(serviceId)
         client.addBackend(serviceId, version, environment)
         client.addDomain(serviceId, version, 'https://cdn-purge-test.herokuapp.com')
-        client.addMainCustomVcl(serviceId, version, buildConfig("403"))
+        addAutoDiscoverBlock(serviceId, version)
+//        addWwwRedirect(serviceId, version)
         addDefault404CacheSettings(serviceId, version)
-        if (environment == Environment.PROD) {
-            addAutoDiscoverBlock(serviceId, version)
-            addWwwRedirect(serviceId, version)
-        }
+//        if (environment == Environment.PROD) {
+//        }
 //        addDefault503Response(serviceId, version)
         addDefaultCacheControl(serviceId, version)
         addServerHeaderOverwriting(serviceId, version)
@@ -156,6 +140,7 @@ class PurgeService {
         client.updateDefaultTtl(serviceId, version)
         client.addSslForcingSetting(serviceId, version)
         client.activate(serviceId, version)
+        client.addMainCustomVcl(serviceId, version, buildConfig("<html></html>"))
     }
 
 //    private String lookupPreviewService(Environment environment) {

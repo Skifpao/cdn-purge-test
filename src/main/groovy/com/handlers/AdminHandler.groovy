@@ -16,9 +16,11 @@ class AdminHandler extends InjectionHandler {
         ctx.byMethod {
             it.get {
                 ctx.render groovyTemplate("viewPage.html")
+                ctx.response.headers.add("Cache-Control","max-age=60")
             }.post {
                 ctx.parse(Form).then({ data ->
                     service.html = data.get("textarea")
+                    ctx.response.headers.add("Cache-Control","max-age=60")
                     println service.html
 //                    ctx.redirect("/date")
 
