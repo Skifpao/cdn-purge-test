@@ -20,7 +20,7 @@ class AdminHandler extends InjectionHandler {
                 ctx.parse(Form).then({ data ->
                     service.html = data.get("textarea")
                     println service.html
-                    ctx.redirect("/date")
+//                    ctx.redirect("/date")
 
                 })
 

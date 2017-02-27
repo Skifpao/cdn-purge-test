@@ -29,12 +29,9 @@
 <div class="main-wrapper"></div>
 <div class="column">
     <h1>Hello $model.name, meet the amazing Ratpack</h1>
-    <form action="/admin" method="post">
+    <form action="/purgeLayout" method="post">
         <p>Please upload main image</p>
         <input id="image-file" name="image-main-file" type="file" value="1234567"/>
-
-
-        <input id="tesxtwa" name="image-main-file12e321" type="text" value="1234567"/>
         <button type="submit" formaction="/purgeMainImage">Purge</button>
         <br/>
         <p>Please upload image for sub page</p>
@@ -47,7 +44,7 @@
         </div>
         <p>
             <input type="submit" value="Save this page">
-            <button type="submit" formaction="/purgeLayout">Purge layout</button>
+            <button type="submit" formaction="/purgeLayout" >Purge layout</button>
         </p>
     </form>
 </div>

@@ -1,6 +1,7 @@
 package com
 
 import com.google.inject.AbstractModule
+import com.service.PurgeService
 import com.service.UpdatePageService
 import ratpack.guice.RequestScoped
 
@@ -11,5 +12,6 @@ class AdminModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(UpdatePageService)
+        bind(PurgeService)
     }
 }

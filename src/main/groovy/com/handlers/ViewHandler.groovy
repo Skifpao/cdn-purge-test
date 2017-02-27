@@ -12,7 +12,7 @@ import static ratpack.groovy.Groovy.groovyTemplate
 class ViewHandler extends InjectionHandler {
 
     void handle(Context ctx, UpdatePageService service) {
-        println service.html
+//        println service.html
         ctx.render groovyTemplate("result.html", result: service.html)
     }
 }

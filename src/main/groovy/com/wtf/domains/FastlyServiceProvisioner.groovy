@@ -1,31 +1,17 @@
-package com.service
+package com.wtf.domains
 
 import com.google.common.io.Resources
-import com.wtf.domains.Environment
-import com.wtf.domains.FastlyServiceProvisioner
 import com.wtf.domains.fastly.FastlyClient
-import wslite.http.auth.HTTPAuthorization
-import wslite.rest.RESTClient
 
 import static com.google.common.base.Charsets.UTF_8
 import static com.google.common.io.Resources.getResource
-import static com.service.config.FastlyCustomConfig.buildConfig
 import static com.wtf.domains.FastlyCustomConfig.buildConfig
 
-/**
- * Created by skifpao on 24/02/2017.
- */
-class PurgeService {
-
-     void provision(){
-        client = new FastlyClient("7a400cb9df4954bfc46c246e5fcbd91c")
-
-//       def provisioner =  new FastlyServiceProvisioner(client)
-        provisionPublished(Environment.PROD)
-    }
+@SuppressWarnings("Println")
+class FastlyServiceProvisioner {
 
     public static final ArrayList<String> RETAINED_QUERY_PARAMETERS = ['tracker_id', 'topics', 'sptoken', 'vip_code']
-//    public static final String ERROR_PAGE_CONTENT = Resources.toString(getResource("503.html"), UTF_8)
+    public static final String ERROR_PAGE_CONTENT = Resources.toString(getResource("503.html"), UTF_8)
 
 
     private final PUBLISHED_SERVICES = [
@@ -33,14 +19,14 @@ class PurgeService {
     ]
 
     FastlyClient client
-//
-//    FastlyServiceProvisioner() {
-//    }
-//
-//
-//    FastlyServiceProvisioner(FastlyClient client) {
-//        this.client = client
-//    }
+
+    FastlyServiceProvisioner() {
+    }
+
+
+    FastlyServiceProvisioner(FastlyClient client) {
+        this.client = client
+    }
 
     void addDefaultCacheControl(String serviceId, int version) {
         client.addHeaderSetting(serviceId, version, "default_cache_control", "http.Cache-Control", '"max-age=30"', true)
@@ -89,13 +75,13 @@ class PurgeService {
         println "Added Query stripping to service $serviceId"
     }
 
-//    void addDefault503Response(String serviceId, int version) {
-//        def conditionName = "is_503_response"
-//        client.addCondition(serviceId, version, conditionName, "beresp.status == 503", "CACHE")
-//        println "Added 503 response condition to service $serviceId"
-//        client.addCacheResponseObject(serviceId, version, "default_503_page", 503, "Service Unavailable", conditionName, "text/html", "ERROR_PAGE_CONTENT")
-//        println "Added 503 response to service $serviceId"
-//    }
+    void addDefault503Response(String serviceId, int version) {
+        def conditionName = "is_503_response"
+        client.addCondition(serviceId, version, conditionName, "beresp.status == 503", "CACHE")
+        println "Added 503 response condition to service $serviceId"
+        client.addCacheResponseObject(serviceId, version, "default_503_page", 503, "Service Unavailable", conditionName, "text/html", ERROR_PAGE_CONTENT)
+        println "Added 503 response to service $serviceId"
+    }
 
     void addDisallowPurgeResponse(String serviceId, int version) {
         def conditionName = "http_method_is_purge"
@@ -136,15 +122,14 @@ class PurgeService {
     void provisionPublished(Environment environment) {
         def serviceId = lookupPublishedService(environment)
         def version = client.addNewVersion(serviceId)
-        client.addBackend(serviceId, version, environment)
-        client.addDomain(serviceId, version, 'https://cdn-purge-test.herokuapp.com')
-        client.addMainCustomVcl(serviceId, version, buildConfig("403"))
+        client.addMainCustomVcl(serviceId, version, buildConfig(ERROR_PAGE_CONTENT))
         addDefault404CacheSettings(serviceId, version)
         if (environment == Environment.PROD) {
             addAutoDiscoverBlock(serviceId, version)
             addWwwRedirect(serviceId, version)
+            client.addDomain(serviceId, version, 'https://cdn-purge-test.herokuapp.com')
         }
-//        addDefault503Response(serviceId, version)
+        addDefault503Response(serviceId, version)
         addDefaultCacheControl(serviceId, version)
         addServerHeaderOverwriting(serviceId, version)
         addQueryParameterStripping(serviceId, version)
@@ -153,6 +138,7 @@ class PurgeService {
         addWordpressExploitTargetingRequestResponse(serviceId, version)
         addBlockedRequestResponse(serviceId, version)
 
+        client.addBackend(serviceId, version, environment)
         client.updateDefaultTtl(serviceId, version)
         client.addSslForcingSetting(serviceId, version)
         client.activate(serviceId, version)
@@ -163,7 +149,7 @@ class PurgeService {
 //    }
 
     private String lookupPublishedService(Environment environment) {
-        "aCN0Sr9VArXGM8mln1BKw"
+        check(PUBLISHED_SERVICES, environment)
     }
 
     private String check(Map<Environment, String> services, Environment environment) {
@@ -173,4 +159,5 @@ class PurgeService {
             throw new IllegalStateException("No service configured for $environment")
         }
     }
+
 }
